@@ -43,8 +43,8 @@ Resources:
       Timeout: 30
       Environment:
         Variables:
-          - SLACK_SIGNING_SECRET: !Ref SlackSigningSecret
-          - SLACK_BOT_TOKEN: !Ref SlackBotToken
+          SLACK_SIGNING_SECRET: !Ref SlackSigningSecret
+          SLACK_BOT_TOKEN: !Ref SlackBotToken
       Events:
         Verify:
           Type: Api
