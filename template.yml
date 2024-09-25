@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  Prefix:
+    Type: String
+    Description: Resource name prefix.
+  Env:
+    Type: String
+    Description: Resource deployment environment.
+  SlackSigningSecret:
+    Type: String
+    Description: Slack Bot App Credentials Signing Secret.
+  SlackBotToken:
+    Type: String
+    Description: Slack Bot OAuth & Permissions Bot User OAuth Token.
+Resources:
+#######################################
+# AWS Lambda Layer Resource
+#######################################
+  SlackLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: slack sdk
+      ContentUri: layers/slack
+      CompatibleRuntimes:
+        - python3.12
+      RetentionPolicy: Delete
+
+#######################################
+# AWS Lambda Resource
+#######################################
+  MailAnywhereFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${Prefix}-${Env}-ma-lambda"
+      CodeUri: functions/mailanywhere
+      Handler: app.handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref SlackLayer
+      Timeout: 30
+      Environment:
+        - SLACK_SIGNING_SECRET: !Ref SlackSigningSecret
+        - SLACK_BOT_TOKEN: !Ref SlackBotToken
+      Events:
+        Verify:
+          Type: Api
+          Properties:
+            Path: /
+            Method: any
+        Find:
+          Type: Api
+          Properties:
+            Path: /sendemail
+            Method: any
