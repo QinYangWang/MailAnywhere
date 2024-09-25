@@ -25,7 +25,8 @@ Resources:
       CompatibleRuntimes:
         - python3.9
       RetentionPolicy: Delete
-
+    Metadata:
+      BuildMethod: python3.9
 #######################################
 # AWS Lambda Resource
 #######################################
