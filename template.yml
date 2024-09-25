@@ -15,6 +15,29 @@ Parameters:
     Description: Slack Bot OAuth & Permissions Bot User OAuth Token.
 Resources:
 #######################################
+# User Identities DynamoDB Table
+#######################################
+  IdentityDynamoDBTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: !Sub "${Perifx}-${env}-dynamodb-identity"
+      AttributeDefinitions:
+        - AttributeName: UserId
+          AttributeType: S
+        - AttributeName: CreatedAt
+          AttributeType: S
+        - AttributeName: Identity
+          AttributeType: S
+        - AttributeName: Type
+          AttributeType: S
+        - AttributeName: Status
+          AttributeType: S
+      KeySchema:
+        - AttributeName: UserId
+          KeyType: HASH
+        - AttributeName: CreatedAt
+          KeyType: RANGE
+#######################################
 # AWS Lambda Layer Resource
 #######################################
   SlackLayer:
@@ -46,6 +69,7 @@ Resources:
         Variables:
           SLACK_SIGNING_SECRET: !Ref SlackSigningSecret
           SLACK_BOT_TOKEN: !Ref SlackBotToken
+          IDENTITY_TABLE_NAME: !Ref IdentityDynamoDBTable
       Events:
         Verify:
           Type: Api
