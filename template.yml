@@ -23,7 +23,7 @@ Resources:
       Description: slack sdk
       ContentUri: layers/slack
       CompatibleRuntimes:
-        - python3.12
+        - python3.9
       RetentionPolicy: Delete
 
 #######################################
@@ -35,7 +35,7 @@ Resources:
       FunctionName: !Sub "${Prefix}-${Env}-ma-lambda"
       CodeUri: functions/mailanywhere
       Handler: app.handler
-      Runtime: python3.12
+      Runtime: python3.9
       Architectures:
         - x86_64
       Layers:
